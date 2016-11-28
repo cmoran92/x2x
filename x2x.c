@@ -1918,9 +1918,15 @@ XMotionEvent *pEv; /* caution: might be pseudo-event!!! */
                       pDpyInfo->yTables[toScreenNum][pEv->y_root]);
 #endif
 
+    if (pEv->x_root > compRegRight) {
+      XWarpPointer(fromDpy, None, pDpyInfo->root, 0, 0, 0, 0, compRegRight, fromCoord);
+    }
+    if (pEv->y_root > compRegLow) {
+      XWarpPointer(fromDpy, None, pDpyInfo->root, 0, 0, 0, 0, pEv->x_root, compRegLow);
+    }
     XTestFakeMotionEvent(pShadow->dpy, toScreenNum,
-                      vert?pDpyInfo->xTables[toScreenNum][pEv->x_root]:toCoord,
-                      vert?toCoord:pDpyInfo->yTables[toScreenNum][pEv->y_root],
+                      vert?(pDpyInfo->xTables[toScreenNum][pEv->x_root]>compRegRight?compRegRight:pDpyInfo->xTables[toScreenNum][pEv->x_root]):toCoord,
+                      vert?toCoord:(pDpyInfo->yTables[toScreenNum][pEv->y_root]>compRegLow?compRegLow:pDpyInfo->yTables[toScreenNum][pEv->y_root]),
                       0);
     XFlush(pShadow->dpy);
     pShadow->flush = False;
