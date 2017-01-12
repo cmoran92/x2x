@@ -1919,9 +1919,11 @@ XMotionEvent *pEv; /* caution: might be pseudo-event!!! */
 #endif
 
     if (pEv->x_root > compRegRight) {
+      fromDpy = pDpyInfo->fromDpy;
       XWarpPointer(fromDpy, None, pDpyInfo->root, 0, 0, 0, 0, compRegRight, fromCoord);
     }
     if (pEv->y_root > compRegLow) {
+      fromDpy = pDpyInfo->fromDpy;
       XWarpPointer(fromDpy, None, pDpyInfo->root, 0, 0, 0, 0, pEv->x_root, compRegLow);
     }
     XTestFakeMotionEvent(pShadow->dpy, toScreenNum,
